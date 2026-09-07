@@ -8,7 +8,11 @@ function SearchBar({ search, setSearch }) {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <button>Search</button>
+      {search && (
+        <button onClick={() => setSearch('')}>
+          Clear
+        </button>
+      )}
     </div>
   )
 }

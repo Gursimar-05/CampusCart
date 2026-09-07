@@ -225,3 +225,7 @@ input {
 .details-button:hover {
   background: #334e68;
 }
+.search-container button {
+  margin: 0;
+  min-width: 80px;
+}
