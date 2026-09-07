@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import './App.css'
 import Navbar from './Navbar'
@@ -16,7 +15,20 @@ function App() {
   const [search, setSearch] = useState('')
 
   const [selectedListing, setSelectedListing] = useState(null)
+
   const [showSellForm, setShowSellForm] = useState(false)
+  const [showContactForm, setShowContactForm] = useState(false)
+
+  const [messageSent, setMessageSent] = useState(false)
+
+  const [interested, setInterested] = useState(false)
+
+  const [notifications, setNotifications] = useState([])
+
+  const [showNotifications, setShowNotifications] = useState(false)
+
+  const [message, setMessage] = useState('')
+  const [showLoginForm, setShowLoginForm] = useState(false)
 
   const [newListing, setNewListing] = useState({
     title: '',
@@ -28,6 +40,10 @@ function App() {
     location: 'Your Block',
     image: ''
   })
+
+  /* =========================
+     SELL FORM
+     ========================= */
 
   function handleInputChange(event) {
     const { name, value } = event.target
@@ -84,6 +100,79 @@ function App() {
     setShowSellForm(false)
   }
 
+  /* =========================
+     CONTACT SELLER
+     ========================= */
+
+  function handleContactSeller() {
+    if (!message.trim()) {
+      return
+    }
+
+    setMessageSent(true)
+  }
+
+  function closeContactForm() {
+    setShowContactForm(false)
+    setMessage('')
+    setMessageSent(false)
+  }
+
+  /* =========================
+     INTERESTED
+     ========================= */
+
+  function handleInterested() {
+    if (!selectedListing) {
+      return
+    }
+
+    if (interested) {
+      return
+    }
+
+    setInterested(true)
+
+    const notification = {
+      id: Date.now(),
+      seller: selectedListing.seller,
+      title: selectedListing.title,
+      message: `Someone is interested in your ${selectedListing.title}.`,
+      time: 'Just now'
+    }
+
+    setNotifications([
+      notification,
+      ...notifications
+    ])
+  }
+
+  /* =========================
+     REMOVE NOTIFICATION
+     ========================= */
+
+  function removeNotification(notificationId) {
+    setNotifications(
+      notifications.filter(
+        (notification) =>
+          notification.id !== notificationId
+      )
+    )
+  }
+
+  /* =========================
+     CLOSE DETAILS
+     ========================= */
+
+  function closeDetails() {
+    setSelectedListing(null)
+    setInterested(false)
+  }
+
+  /* =========================
+     FILTER LISTINGS
+     ========================= */
+
   const filteredListings = listings.filter((listing) => {
     const matchesType =
       selectedType === 'ALL' ||
@@ -107,12 +196,112 @@ function App() {
 
   return (
     <div>
-      <Navbar />
+
+      <Navbar
+  onSell={() => setShowSellForm(true)}
+  onLogin={() => setShowLoginForm(true)}
+/>
+
+      {/* =========================
+          NOTIFICATIONS
+          ========================= */}
+
+      <div className="notification-area">
+
+        <button
+          className="notification-button"
+          onClick={() =>
+            setShowNotifications(!showNotifications)
+          }
+        >
+          🔔
+
+          {notifications.length > 0 && (
+            <span className="notification-count">
+              {notifications.length}
+            </span>
+          )}
+        </button>
+
+        {showNotifications && (
+
+          <div className="notification-panel">
+
+            <h3>Notifications</h3>
+
+            {notifications.length === 0 ? (
+
+              <p className="empty-notifications">
+                No notifications yet.
+              </p>
+
+            ) : (
+
+              notifications.map((notification) => (
+
+                <div
+                  className="notification-item"
+                  key={notification.id}
+                >
+
+                  <div className="notification-icon">
+                    !
+                  </div>
+
+                  <div className="notification-content">
+
+                    <strong>
+                      New interest
+                    </strong>
+
+                    <p>
+                      {notification.message}
+                    </p>
+
+                    <small>
+                      {notification.time}
+                    </small>
+
+                  </div>
+
+                  {/* REMOVE NOTIFICATION */}
+
+                  <button
+                    className="remove-notification"
+                    onClick={() =>
+                      removeNotification(
+                        notification.id
+                      )
+                    }
+                    aria-label="Remove notification"
+                  >
+                    ×
+                  </button>
+
+                </div>
+
+              ))
+
+            )}
+
+          </div>
+
+        )}
+
+      </div>
+
+      {/* =========================
+          HERO
+          ========================= */}
 
       <Hero
         search={search}
         setSearch={setSearch}
       />
+
+      {/* =========================
+          MARKETPLACE CONTROLS
+          ========================= */}
 
       <div className="marketplace-controls">
 
@@ -128,20 +317,31 @@ function App() {
 
       </div>
 
-      <section className="listings-section">
+      {/* =========================
+          LISTINGS
+          ========================= */}
+
+      <section
+  id="marketplace"
+  className="listings-section"
+>
 
         <div className="listings-heading">
 
           <div>
+
             <p className="section-label">
               CAMPUS MARKETPLACE
             </p>
 
-            <h2>Fresh on Campus</h2>
+            <h2>
+              Fresh on Campus
+            </h2>
 
             <p>
               Find what you need from students around you.
             </p>
+
           </div>
 
           <button
@@ -156,7 +356,9 @@ function App() {
         <div className="listing-container">
 
           {filteredListings.length > 0 ? (
+
             filteredListings.map((listing) => (
+
               <ListingCard
                 key={listing.id}
                 title={listing.title}
@@ -169,35 +371,51 @@ function App() {
                 location={listing.location}
                 onViewDetails={setSelectedListing}
               />
+
             ))
+
           ) : (
+
             <div className="no-results">
-              <h3>No listings found</h3>
+
+              <h3>
+                No listings found
+              </h3>
+
               <p>
                 Try another search or category.
               </p>
+
             </div>
+
           )}
 
         </div>
 
       </section>
 
-      {/* SELL ITEM MODAL */}
+      {/* =========================
+          SELL ITEM MODAL
+          ========================= */}
 
       {showSellForm && (
+
         <div className="modal-overlay">
 
           <div className="modal sell-modal">
 
             <button
               className="modal-close"
-              onClick={() => setShowSellForm(false)}
+              onClick={() =>
+                setShowSellForm(false)
+              }
             >
               ×
             </button>
 
-            <h2>Sell an Item</h2>
+            <h2>
+              Sell an Item
+            </h2>
 
             <p>
               Add something you'd like to sell or rent
@@ -237,8 +455,19 @@ function App() {
                 value={newListing.type}
                 onChange={handleInputChange}
               >
-                <option value="BUY">BUY</option>
-                <option value="RENT">RENT</option>
+
+                <option value="BUY">
+                  BUY
+                </option>
+
+                <option value="RENT">
+                  RENT
+                </option>
+
+                <option value="BOTH">
+                  BUY & RENT
+                </option>
+
               </select>
 
               <select
@@ -246,13 +475,27 @@ function App() {
                 value={newListing.category}
                 onChange={handleInputChange}
               >
-                <option value="Books">Books</option>
+
+                <option value="Books">
+                  Books
+                </option>
+
                 <option value="Electronics">
                   Electronics
                 </option>
+
                 <option value="Furniture">
                   Furniture
                 </option>
+
+                 <option value="Stationery">
+                  Stationery
+                 </option>
+
+                 <option value="Clothing">
+                  Clothing
+                  </option>
+
               </select>
 
               <input
@@ -264,7 +507,7 @@ function App() {
                 required
               />
 
-              {/* ITEM PICTURE */}
+              {/* IMAGE UPLOAD */}
 
               <div className="image-upload">
 
@@ -285,11 +528,13 @@ function App() {
                 </small>
 
                 {newListing.image && (
+
                   <img
                     src={newListing.image}
                     alt="Preview"
                     className="upload-preview"
                   />
+
                 )}
 
               </div>
@@ -306,18 +551,22 @@ function App() {
           </div>
 
         </div>
+
       )}
 
-      {/* LISTING DETAILS MODAL */}
+      {/* =========================
+          LISTING DETAILS
+          ========================= */}
 
       {selectedListing && (
+
         <div className="modal-overlay">
 
           <div className="modal">
 
             <button
               className="modal-close"
-              onClick={() => setSelectedListing(null)}
+              onClick={closeDetails}
             >
               ×
             </button>
@@ -328,7 +577,9 @@ function App() {
               className="modal-image"
             />
 
-            <h2>{selectedListing.title}</h2>
+            <h2>
+              {selectedListing.title}
+            </h2>
 
             <p>
               {selectedListing.description}
@@ -358,13 +609,122 @@ function App() {
 
             </div>
 
-            <button className="contact-button">
+            {/* FIXED INTERESTED BUTTON */}
+
+            <button
+              className={
+                interested
+                  ? 'interested-button interested'
+                  : 'interested-button'
+              }
+              onClick={handleInterested}
+            >
+              {interested
+                ? '✓ Interest Sent'
+                : "I'm Interested"}
+            </button>
+
+            <button
+              className="contact-button"
+              onClick={() =>
+                setShowContactForm(true)
+              }
+            >
               Contact Seller
             </button>
 
           </div>
 
         </div>
+
+      )}
+
+      {/* =========================
+          CONTACT SELLER
+          ========================= */}
+
+      {showContactForm && selectedListing && (
+
+        <div className="modal-overlay">
+
+          <div className="modal contact-modal">
+
+            <button
+              className="modal-close"
+              onClick={closeContactForm}
+            >
+              ×
+            </button>
+
+            {!messageSent ? (
+
+              <>
+
+                <div className="contact-icon">
+                  💬
+                </div>
+
+                <h2>
+                  Contact {selectedListing.seller}
+                </h2>
+
+                <p>
+                  Send a message about{' '}
+                  <strong>
+                    {selectedListing.title}
+                  </strong>
+                </p>
+
+                <textarea
+                  className="message-input"
+                  placeholder="Hi! Is this item still available?"
+                  value={message}
+                  onChange={(event) =>
+                    setMessage(event.target.value)
+                  }
+                />
+
+                <button
+                  className="contact-button"
+                  onClick={handleContactSeller}
+                >
+                  Send Message
+                </button>
+
+              </>
+
+            ) : (
+
+              <div className="success-message">
+
+                <div className="success-icon">
+                  ✓
+                </div>
+
+                <h2>
+                  Message Sent!
+                </h2>
+
+                <p>
+                  Your message has been sent to{' '}
+                  {selectedListing.seller}.
+                </p>
+
+                <button
+                  className="contact-button"
+                  onClick={closeContactForm}
+                >
+                  Done
+                </button>
+
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
+
       )}
 
     </div>
@@ -372,3 +732,4 @@ function App() {
 }
 
 export default App
+
