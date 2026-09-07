@@ -4,46 +4,66 @@ function ListingCard({
   price,
   type,
   category,
-  emoji,
+  image,
   seller,
   location,
   onViewDetails
 }) {
   return (
     <div className="listing-card">
-      <div className="listing-image">
-        {emoji}
+
+      <div className="listing-image-container">
+        <img
+          src={image}
+          alt={title}
+          className="listing-image"
+        />
+
+        <span className="category-badge">
+          {category}
+        </span>
       </div>
 
-      <h3>{title}</h3>
+      <div className="listing-content">
 
-      <p>{description}</p>
+        <h3>{title}</h3>
 
-      <strong>₹{price}</strong>
+        <p className="listing-description">
+          {description}
+        </p>
 
-      <span>{type}</span>
+        <div className="listing-price-row">
+          <strong>₹{price}</strong>
 
-      <p className="seller-info">
-        👤 {seller} · 📍 {location}
-      </p>
+          <span className={`type-badge ${type.toLowerCase()}`}>
+            {type}
+          </span>
+        </div>
 
-      <button
-        className="details-button"
-        onClick={() =>
-          onViewDetails({
-            title,
-            description,
-            price,
-            type,
-            category,
-            emoji,
-            seller,
-            location
-          })
-        }
-      >
-        View Details
-      </button>
+        <div className="seller-info">
+          <span>👤 {seller}</span>
+          <span>📍 {location}</span>
+        </div>
+
+        <button
+          className="details-button"
+          onClick={() =>
+            onViewDetails({
+              title,
+              description,
+              price,
+              type,
+              category,
+              image,
+              seller,
+              location
+            })
+          }
+        >
+          View Details →
+        </button>
+
+      </div>
     </div>
   )
 }

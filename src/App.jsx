@@ -18,12 +18,8 @@ function App() {
     <div>
       <Navbar />
 
-      <Hero />
+     <Hero search={search} setSearch={setSearch} />
 
-      <SearchBar
-        search={search}
-        setSearch={setSearch}
-      />
 
       <ListingType
         selectedType={selectedType}
@@ -35,47 +31,89 @@ function App() {
         setSelectedCategory={setSelectedCategory}
       />
 
-      <div className="listing-container">
-        {listings
-          .filter((listing) => {
-            const matchesType =
-              selectedType === 'ALL' ||
-              listing.type === selectedType
+      <section className="listings-section">
 
-            const matchesCategory =
-              selectedCategory === 'ALL' ||
-              listing.category === selectedCategory
+        <div className="listings-heading">
+          <div>
+            <p className="section-label">CAMPUS MARKETPLACE</p>
+            <h2>Fresh on Campus</h2>
+            <p>
+              Find what you need from students around you.
+            </p>
+          </div>
 
-            const matchesSearch =
-              listing.title
-                .toLowerCase()
-                .includes(search.toLowerCase())
+          <span>
+            {listings.filter((listing) => {
+              const matchesType =
+                selectedType === 'ALL' ||
+                listing.type === selectedType
 
-            return (
-              matchesType &&
-              matchesCategory &&
-              matchesSearch
-            )
-          })
-          .map((listing) => (
-            <ListingCard
-              key={listing.title}
-              title={listing.title}
-              description={listing.description}
-              price={listing.price}
-              type={listing.type}
-              category={listing.category}
-              emoji={listing.emoji}
-              seller={listing.seller}
-              location={listing.location}
-              onViewDetails={setSelectedListing}
-            />
-          ))}
-      </div>
+              const matchesCategory =
+                selectedCategory === 'ALL' ||
+                listing.category === selectedCategory
+
+              const matchesSearch =
+                listing.title
+                  .toLowerCase()
+                  .includes(search.toLowerCase())
+
+              return (
+                matchesType &&
+                matchesCategory &&
+                matchesSearch
+              )
+            }).length}{' '}
+            items
+          </span>
+        </div>
+
+        <div className="listing-container">
+
+          {listings
+            .filter((listing) => {
+              const matchesType =
+                selectedType === 'ALL' ||
+                listing.type === selectedType
+
+              const matchesCategory =
+                selectedCategory === 'ALL' ||
+                listing.category === selectedCategory
+
+              const matchesSearch =
+                listing.title
+                  .toLowerCase()
+                  .includes(search.toLowerCase())
+
+              return (
+                matchesType &&
+                matchesCategory &&
+                matchesSearch
+              )
+            })
+            .map((listing) => (
+              <ListingCard
+                key={listing.title}
+                title={listing.title}
+                description={listing.description}
+                price={listing.price}
+                type={listing.type}
+                category={listing.category}
+                image={listing.image}
+                seller={listing.seller}
+                location={listing.location}
+                onViewDetails={setSelectedListing}
+              />
+            ))}
+
+        </div>
+
+      </section>
 
       {selectedListing && (
         <div className="modal-overlay">
+
           <div className="modal">
+
             <button
               className="modal-close"
               onClick={() => setSelectedListing(null)}
@@ -83,28 +121,44 @@ function App() {
               ×
             </button>
 
-            <div className="listing-image">
-              {selectedListing.emoji}
-            </div>
+            <img
+              src={selectedListing.image}
+              alt={selectedListing.title}
+              className="modal-image"
+            />
 
             <h2>{selectedListing.title}</h2>
 
             <p>{selectedListing.description}</p>
 
-            <strong>₹{selectedListing.price}</strong>
+            <div className="modal-price">
+              ₹{selectedListing.price}
+            </div>
 
-            <span>{selectedListing.type}</span>
+            <span className="type-badge">
+              {selectedListing.type}
+            </span>
 
             <div className="modal-info">
-              <p>📂 Category: {selectedListing.category}</p>
-              <p>👤 Seller: {selectedListing.seller}</p>
-              <p>📍 Location: {selectedListing.location}</p>
+              <p>
+                👤 Seller: {selectedListing.seller}
+              </p>
+
+              <p>
+                📍 Location: {selectedListing.location}
+              </p>
+
+              <p>
+                📂 Category: {selectedListing.category}
+              </p>
             </div>
 
             <button className="contact-button">
               Contact Seller
             </button>
+
           </div>
+
         </div>
       )}
     </div>
@@ -112,4 +166,3 @@ function App() {
 }
 
 export default App
-
