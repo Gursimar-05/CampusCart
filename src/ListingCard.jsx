@@ -1,10 +1,4 @@
-function ListingCard({ title, description, price, type, emoji }) {
-  function handleDetails() {
-    alert(
-      `${title}\n\n${description}\nPrice: ₹${price}\nType: ${type}`
-    )
-  }
-
+function ListingCard({ title, description, price, type, emoji, onViewDetails }) {
   return (
     <div className="listing-card">
       <div className="listing-image">{emoji}</div>
@@ -17,7 +11,12 @@ function ListingCard({ title, description, price, type, emoji }) {
 
       <span>{type}</span>
 
-      <button className="details-button" onClick={handleDetails}>
+      <button
+        className="details-button"
+        onClick={() =>
+          onViewDetails({ title, description, price, type, emoji })
+        }
+      >
         View Details
       </button>
     </div>
