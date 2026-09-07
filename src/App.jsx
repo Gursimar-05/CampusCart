@@ -9,13 +9,17 @@ import { useState } from 'react'
 
 function App() {
   const [selectedType, setSelectedType] = useState('ALL')
+  const [search, setSearch] = useState('')
   return (
     <div>
       <Navbar />
 
       <Hero />
 
-      <SearchBar />
+<SearchBar
+  search={search}
+  setSearch={setSearch}
+/>
 
       <ListingType
   selectedType={selectedType}
@@ -25,32 +29,35 @@ function App() {
       <Categories />
 
       <div className="listing-container">
-          {(selectedType === 'ALL' || selectedType === 'BUY') && (
-  <ListingCard
-    title="Engineering Mathematics"
-    description="Good condition, used for one semester."
-    price="300"
-    type="BUY"
-    emoji="📚"
-  />
+         {(selectedType === 'ALL' || selectedType === 'BUY') &&
+  'Engineering Mathematics'.toLowerCase().includes(search.toLowerCase()) && (
+    <ListingCard
+      title="Engineering Mathematics"
+      description="Good condition, used for one semester."
+      price="300"
+      type="BUY"
+      emoji="📚"
+    />
 )}
-{(selectedType === 'ALL' || selectedType === 'BUY') && (
-  <ListingCard
-    title="Wireless Headphones"
-    description="Barely used, excellent condition."
-    price="800"
-    type="BUY"
-    emoji="🎧"
-  />
+{(selectedType === 'ALL' || selectedType === 'BUY') &&
+  'Wireless Headphones'.toLowerCase().includes(search.toLowerCase()) && (
+    <ListingCard
+      title="Wireless Headphones"
+      description="Barely used, excellent condition."
+      price="800"
+      type="BUY"
+      emoji="🎧"
+    />
 )}
-{(selectedType === 'ALL' || selectedType === 'RENT') && (
-  <ListingCard
-    title="Study Chair"
-    description="Comfortable chair available for rental."
-    price="50/day"
-    type="RENT"
-    emoji="🪑"
-  />
+{(selectedType === 'ALL' || selectedType === 'RENT') &&
+  'Study Chair'.toLowerCase().includes(search.toLowerCase()) && (
+    <ListingCard
+      title="Study Chair"
+      description="Comfortable chair available for rental."
+      price="50/day"
+      type="RENT"
+      emoji="🪑"
+    />
 )}
       </div>
     </div>
