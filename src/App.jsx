@@ -10,6 +10,7 @@ import listings from './listings'
 
 function App() {
   const [selectedType, setSelectedType] = useState('ALL')
+  const [selectedCategory, setSelectedCategory] = useState('ALL')
   const [search, setSearch] = useState('')
   const [selectedListing, setSelectedListing] = useState(null)
 
@@ -29,7 +30,10 @@ function App() {
         setSelectedType={setSelectedType}
       />
 
-      <Categories />
+      <Categories
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
 
       <div className="listing-container">
         {listings
@@ -38,12 +42,20 @@ function App() {
               selectedType === 'ALL' ||
               listing.type === selectedType
 
+            const matchesCategory =
+              selectedCategory === 'ALL' ||
+              listing.category === selectedCategory
+
             const matchesSearch =
               listing.title
                 .toLowerCase()
                 .includes(search.toLowerCase())
 
-            return matchesType && matchesSearch
+            return (
+              matchesType &&
+              matchesCategory &&
+              matchesSearch
+            )
           })
           .map((listing) => (
             <ListingCard
@@ -52,6 +64,7 @@ function App() {
               description={listing.description}
               price={listing.price}
               type={listing.type}
+              category={listing.category}
               emoji={listing.emoji}
               seller={listing.seller}
               location={listing.location}
@@ -83,6 +96,7 @@ function App() {
             <span>{selectedListing.type}</span>
 
             <div className="modal-info">
+              <p>📂 Category: {selectedListing.category}</p>
               <p>👤 Seller: {selectedListing.seller}</p>
               <p>📍 Location: {selectedListing.location}</p>
             </div>
@@ -99,4 +113,3 @@ function App() {
 
 export default App
 
-export default App

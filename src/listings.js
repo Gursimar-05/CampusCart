@@ -4,6 +4,7 @@ const listings = [
     description: 'Good condition, used for one semester.',
     price: '300',
     type: 'BUY',
+    category: 'Books',
     emoji: '📚',
     seller: 'Alex',
     location: 'Block 5'
@@ -13,6 +14,7 @@ const listings = [
     description: 'Barely used, excellent condition.',
     price: '800',
     type: 'BUY',
+    category: 'Electronics',
     emoji: '🎧',
     seller: 'Sam',
     location: 'Hostel Block 2'
@@ -22,6 +24,7 @@ const listings = [
     description: 'Comfortable chair available for rental.',
     price: '50/day',
     type: 'RENT',
+    category: 'Furniture',
     emoji: '🪑',
     seller: 'Jordan',
     location: 'Block 3'

@@ -325,3 +325,34 @@ input {
   width: 100%;
   margin: 22px 0 0;
 }
+.categories {
+  text-align: center;
+  margin: 20px auto 40px;
+}
+
+.categories h2 {
+  color: #243b53;
+  margin-bottom: 18px;
+}
+
+.category-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.category-buttons button {
+  margin: 0;
+  background: #e0e7ee;
+  color: #243b53;
+}
+
+.category-buttons button:hover {
+  background: #ccd6e0;
+}
+
+.category-buttons button.active {
+  background: #243b53;
+  color: white;
+}

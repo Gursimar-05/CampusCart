@@ -3,6 +3,7 @@ function ListingCard({
   description,
   price,
   type,
+  category,
   emoji,
   seller,
   location,
@@ -10,7 +11,9 @@ function ListingCard({
 }) {
   return (
     <div className="listing-card">
-      <div className="listing-image">{emoji}</div>
+      <div className="listing-image">
+        {emoji}
+      </div>
 
       <h3>{title}</h3>
 
@@ -32,6 +35,7 @@ function ListingCard({
             description,
             price,
             type,
+            category,
             emoji,
             seller,
             location
