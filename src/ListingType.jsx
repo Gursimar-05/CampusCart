@@ -1,20 +1,23 @@
-import { useState } from 'react'
-
-function ListingType() {
-  const [type, setType] = useState('Buy')
-
+function ListingType({ selectedType, setSelectedType }) {
   return (
     <div className="listing-type">
       <button
-        className={type === 'Buy' ? 'active' : ''}
-        onClick={() => setType('Buy')}
+        className={selectedType === 'ALL' ? 'active' : ''}
+        onClick={() => setSelectedType('ALL')}
+      >
+        All
+      </button>
+
+      <button
+        className={selectedType === 'BUY' ? 'active' : ''}
+        onClick={() => setSelectedType('BUY')}
       >
         Buy
       </button>
 
       <button
-        className={type === 'Rent' ? 'active' : ''}
-        onClick={() => setType('Rent')}
+        className={selectedType === 'RENT' ? 'active' : ''}
+        onClick={() => setSelectedType('RENT')}
       >
         Rent
       </button>
