@@ -302,3 +302,26 @@ input {
   width: 100%;
   margin: 22px 0 0;
 }
+.seller-info {
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 12px;
+}
+
+.modal-info {
+  margin-top: 20px;
+  padding: 12px;
+  background: #f7f4ef;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.modal-info p {
+  margin: 6px 0;
+  color: #475569;
+}
+
+.contact-button {
+  width: 100%;
+  margin: 22px 0 0;
+}
