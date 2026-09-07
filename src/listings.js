@@ -1,5 +1,6 @@
 const listings = [
   {
+    id: 1,
     title: 'Engineering Mathematics',
     description: 'Good condition, used for one semester.',
     price: '300',
@@ -10,7 +11,9 @@ const listings = [
     seller: 'Alex',
     location: 'Block 5'
   },
+
   {
+    id: 2,
     title: 'Wireless Headphones',
     description: 'Barely used, excellent condition.',
     price: '800',
@@ -21,7 +24,9 @@ const listings = [
     seller: 'Sam',
     location: 'Hostel Block 2'
   },
+
   {
+    id: 3,
     title: 'Study Chair',
     description: 'Comfortable chair available for rental.',
     price: '50/day',

@@ -875,3 +875,127 @@ input {
   padding: 10px;
   font-size: 13px;
 }
+/* =========================
+   SELL BUTTON
+   ========================= */
+
+.sell-button {
+  margin: 0;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: #159a8c;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(21, 154, 140, 0.2);
+}
+
+.sell-button:hover {
+  background: #087f72;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   SELL FORM
+   ========================= */
+
+.sell-modal {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.sell-modal h2 {
+  margin-bottom: 8px;
+}
+
+.sell-modal > p {
+  margin-bottom: 20px;
+  color: #718096;
+}
+
+.sell-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sell-modal input,
+.sell-modal textarea,
+.sell-modal select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border: 1px solid #d9e1e8;
+  border-radius: 10px;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  background: #f8fafc;
+}
+
+.sell-modal textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.sell-modal input:focus,
+.sell-modal textarea:focus,
+.sell-modal select:focus {
+  border-color: #159a8c;
+  background: white;
+}
+
+/* =========================
+   NO RESULTS
+   ========================= */
+
+.no-results {
+  grid-column: 1 / -1;
+  padding: 60px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e5eaf0;
+}
+
+.no-results h3 {
+  margin-bottom: 8px;
+  color: #243b53;
+}
+
+.no-results p {
+  color: #718096;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 600px) {
+  .listings-heading {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sell-button {
+    width: 100%;
+  }
+}
+.sell-modal input,
+.sell-modal textarea,
+.sell-modal select {
+  color: #243b53;
+  background: white;
+}
+
+.sell-modal input::placeholder,
+.sell-modal textarea::placeholder {
+  color: #94a3b8;
+}
+
+.sell-modal input:focus,
+.sell-modal textarea:focus,
+.sell-modal select:focus {
+  color: #243b53;
+  border-color: #159a8c;
+  outline: none;
+}
