@@ -15,6 +15,7 @@ function App() {
   const [search, setSearch] = useState('')
 
   const [selectedListing, setSelectedListing] = useState(null)
+  const [favourites, setFavourites] = useState([])
 
   const [showSellForm, setShowSellForm] = useState(false)
   const [showContactForm, setShowContactForm] = useState(false)
@@ -29,6 +30,10 @@ function App() {
 
   const [message, setMessage] = useState('')
   const [showLoginForm, setShowLoginForm] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+const [loginEmail, setLoginEmail] = useState('')
+const [loginPassword, setLoginPassword] = useState('')
+const [loginError, setLoginError] = useState('')
 
   const [newListing, setNewListing] = useState({
     title: '',
@@ -40,6 +45,16 @@ function App() {
     location: 'Your Block',
     image: ''
   })
+  function handleLogin() {
+  if (!loginEmail || !loginPassword) {
+    setLoginError('Please enter your email and password.')
+    return
+  }
+
+  setIsLoggedIn(true)
+  setShowLoginForm(false)
+  setLoginError('')
+}
 
   /* =========================
      SELL FORM
@@ -173,6 +188,18 @@ function App() {
      FILTER LISTINGS
      ========================= */
 
+    function handleToggleFavourite(listingId) {
+  if (favourites.includes(listingId)) {
+    setFavourites(
+      favourites.filter((id) => id !== listingId)
+    )
+  } else {
+    setFavourites([
+      ...favourites,
+      listingId
+    ])
+  }
+} 
   const filteredListings = listings.filter((listing) => {
     const matchesType =
       selectedType === 'ALL' ||
@@ -200,6 +227,11 @@ function App() {
       <Navbar
   onSell={() => setShowSellForm(true)}
   onLogin={() => setShowLoginForm(true)}
+  onFavourites={() => {
+    document
+      .getElementById('favourites')
+      ?.scrollIntoView({ behavior: 'smooth' })
+  }}
 />
 
       {/* =========================
@@ -325,6 +357,109 @@ function App() {
   id="marketplace"
   className="listings-section"
 >
+  {/* =========================
+    FAVOURITES
+    ========================= */}
+
+<section
+  id="favourites"
+  className="listings-section favourites-section"
+>
+
+  <div className="listings-heading">
+
+    <div>
+      <p className="section-label">
+        YOUR SAVED ITEMS
+      </p>
+
+      <h2>
+        Favourites
+      </h2>
+
+      <p>
+        Items you've saved for later.
+      </p>
+    </div>
+
+  </div>
+
+  <div className="listing-container">
+
+    {listings.filter(
+      (listing) => favourites.includes(listing.id)
+    ).length > 0 ? (
+
+      listings
+        .filter((listing) =>
+          favourites.includes(listing.id)
+        )
+        .map((listing) => (
+
+          <ListingCard
+            key={listing.id}
+            title={listing.title}
+            description={listing.description}
+            price={listing.price}
+            type={listing.type}
+            category={listing.category}
+            image={listing.image}
+            seller={listing.seller}
+            location={listing.location}
+            onViewDetails={setSelectedListing}
+            isFavourite={true}
+            onToggleFavourite={() =>
+              handleToggleFavourite(listing.id)
+            }
+          />
+
+        ))
+
+    ) : (
+
+      <div className="no-results">
+
+        <h3>
+          No favourites yet
+        </h3>
+
+        <p>
+          Click ♡ on an item to save it here.
+        </p>
+
+      </div>
+
+    )}
+
+  </div>
+
+</section>
+   <section id="favourites">
+
+  <h2>Favourites</h2>
+
+  {listings
+    .filter((listing) => favourites.includes(listing.id))
+    .map((listing) => (
+      <ListingCard
+        key={listing.id}
+        title={listing.title}
+        description={listing.description}
+        price={listing.price}
+        type={listing.type}
+        category={listing.category}
+        image={listing.image}
+        seller={listing.seller}
+        location={listing.location}
+        onViewDetails={setSelectedListing}
+        isFavourite={true}
+        onToggleFavourite={() =>
+          handleToggleFavourite(listing.id)
+        }
+      />
+    ))}
+
+</section>
 
         <div className="listings-heading">
 
@@ -370,7 +505,12 @@ function App() {
                 seller={listing.seller}
                 location={listing.location}
                 onViewDetails={setSelectedListing}
+                 isFavourite={favourites.includes(listing.id)}
+  onToggleFavourite={() =>
+    handleToggleFavourite(listing.id)
+  }
               />
+               
 
             ))
 
@@ -470,33 +610,31 @@ function App() {
 
               </select>
 
-              <select
-                name="category"
-                value={newListing.category}
-                onChange={handleInputChange}
-              >
+           <select
+  name="category"
+  value={newListing.category}
+  onChange={handleInputChange}
+>
+  <option value="Books">
+    Books
+  </option>
 
-                <option value="Books">
-                  Books
-                </option>
+  <option value="Electronics">
+    Electronics
+  </option>
 
-                <option value="Electronics">
-                  Electronics
-                </option>
+  <option value="Furniture">
+    Furniture
+  </option>
 
-                <option value="Furniture">
-                  Furniture
-                </option>
+  <option value="Stationery">
+    Stationery
+  </option>
 
-                 <option value="Stationery">
-                  Stationery
-                 </option>
-
-                 <option value="Clothing">
-                  Clothing
-                  </option>
-
-              </select>
+  <option value="Clothing">
+    Clothing
+  </option>
+</select>
 
               <input
                 type="text"
@@ -726,7 +864,63 @@ function App() {
         </div>
 
       )}
+            {/* =========================
+          LOGIN MODAL
+          ========================= */}
 
+      {showLoginForm && (
+
+        <div className="modal-overlay">
+
+          <div className="modal login-modal">
+
+           <h2>Login</h2>
+
+<p>
+  Login to your Campus Cart account.
+</p>
+
+<input
+  type="email"
+  placeholder="College email"
+  value={loginEmail}
+  onChange={(event) =>
+    setLoginEmail(event.target.value)
+  }
+/>
+
+<input
+  type="password"
+  placeholder="Password"
+  value={loginPassword}
+  onChange={(event) =>
+    setLoginPassword(event.target.value)
+  }
+/>
+
+{loginError && (
+  <p className="login-error">
+    {loginError}
+  </p>
+)}
+
+<button
+  className="contact-button"
+  onClick={handleLogin}
+>
+  Login
+</button>
+
+            <small className="login-note">
+              Demo login — authentication will be added later.
+            </small>
+
+          </div>
+
+        </div>
+
+      )}
+      
     </div>
   )
 }

@@ -1,5 +1,6 @@
 
-function Navbar({ onSell, onLogin }) {
+function Navbar({ onSell, onLogin,onFavourites }) {
+
   function handleBrowse() {
     document
       .getElementById('marketplace')
@@ -22,6 +23,9 @@ function Navbar({ onSell, onLogin }) {
         <button onClick={onSell}>
           Sell
         </button>
+        <button onClick={onFavourites}>
+  Favourites
+</button>
 
         <button
           className="login-nav-button"

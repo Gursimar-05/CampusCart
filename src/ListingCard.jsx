@@ -1,3 +1,4 @@
+
 function ListingCard({
   title,
   description,
@@ -7,12 +8,15 @@ function ListingCard({
   image,
   seller,
   location,
-  onViewDetails
+  onViewDetails,
+  isFavourite,
+  onToggleFavourite
 }) {
   return (
     <div className="listing-card">
 
       <div className="listing-image-container">
+
         <img
           src={image}
           alt={title}
@@ -22,6 +26,24 @@ function ListingCard({
         <span className="category-badge">
           {category}
         </span>
+
+        {/* FAVOURITE BUTTON */}
+        <button
+          className={
+            isFavourite
+              ? 'favourite-button favourite-active'
+              : 'favourite-button'
+          }
+          onClick={() => onToggleFavourite()}
+          aria-label={
+            isFavourite
+              ? 'Remove from favourites'
+              : 'Add to favourites'
+          }
+        >
+          {isFavourite ? '♥' : '♡'}
+        </button>
+
       </div>
 
       <div className="listing-content">
@@ -33,11 +55,15 @@ function ListingCard({
         </p>
 
         <div className="listing-price-row">
+
           <strong>₹{price}</strong>
 
-          <span className={`type-badge ${type.toLowerCase()}`}>
+          <span
+            className={`type-badge ${type.toLowerCase()}`}
+          >
             {type}
           </span>
+
         </div>
 
         <div className="seller-info">
@@ -64,8 +90,10 @@ function ListingCard({
         </button>
 
       </div>
+
     </div>
   )
 }
 
 export default ListingCard
+

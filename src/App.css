@@ -1763,3 +1763,110 @@ p {
 .category-list {
   border: none !important;
 }
+
+/* =========================================================
+   FAVOURITE BUTTON
+   ========================================================= */
+
+.favourite-button {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.95);
+  color: #64748b;
+
+  font-size: 22px;
+  line-height: 1;
+
+  box-shadow: 0 5px 15px rgba(36, 59, 83, 0.14);
+
+  transition: all 0.2s ease;
+
+  z-index: 2;
+}
+
+.favourite-button:hover {
+  transform: scale(1.08);
+  background: white;
+}
+
+.favourite-button.favourite-active {
+  color: #e05252;
+}
+
+.favourite-button.favourite-active:hover {
+  color: #c93d3d;
+}
+/* =========================================================
+   LOGIN MODAL
+   ========================================================= */
+
+.login-modal {
+  text-align: center;
+}
+
+.login-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e8f7f4;
+  border-radius: 50%;
+
+  font-size: 26px;
+}
+
+.login-modal h2 {
+  margin-bottom: 7px;
+}
+
+.login-modal > p {
+  margin-bottom: 20px;
+  color: #718096;
+  font-size: 13px;
+}
+
+.login-modal input {
+  width: 100%;
+  padding: 13px;
+
+  margin-bottom: 11px;
+
+  border: 1px solid #d9e1df;
+  border-radius: 10px;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.login-modal input:focus {
+  border-color: #159a8c;
+}
+
+.login-note {
+  display: block;
+  margin-top: 13px;
+  color: #94a3b8;
+  font-size: 10px;
+}
+
+

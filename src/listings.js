@@ -1,4 +1,4 @@
-```js
+
 const listingsData = [
   {
     id: 1,
@@ -98,4 +98,4 @@ const listingsData = [
 ]
 
 export default listingsData
-```
+
