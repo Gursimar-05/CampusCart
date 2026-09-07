@@ -1,17 +1,17 @@
-function ListingCard({ title, description, price, type, emoji }) {
+function Categories() {
   return (
-    <div className="listing-card">
-      <div className="listing-image">{emoji}</div>
+    <section className="categories">
+      <h2>Categories</h2>
 
-      <h3>{title}</h3>
-
-      <p>{description}</p>
-
-      <strong>₹{price}</strong>
-
-      <span>{type}</span>
-    </div>
+      <div className="category-list">
+        <button>Books</button>
+        <button>Electronics</button>
+        <button>Hostel</button>
+        <button>Clothing</button>
+        <button>Other</button>
+      </div>
+    </section>
   )
 }
 
-export default ListingCard
+export default Categories

@@ -1,15 +1,15 @@
-function ListingCard() {
+function ListingCard({ title, description, price, type, emoji }) {
   return (
     <div className="listing-card">
-      <div className="listing-image">📚</div>
+      <div className="listing-image">{emoji}</div>
 
-      <h3>Engineering Mathematics</h3>
+      <h3>{title}</h3>
 
-      <p>Good condition, used for one semester.</p>
+      <p>{description}</p>
 
-      <strong>₹300</strong>
+      <strong>₹{price}</strong>
 
-      <span>BUY</span>
+      <span>{type}</span>
     </div>
   )
 }

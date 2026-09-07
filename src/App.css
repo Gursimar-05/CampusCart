@@ -121,3 +121,51 @@ input {
   background: #243b53;
   color: white;
 }
+.listing-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  gap: 25px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.listing-card {
+  width: 260px;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.listing-image {
+  font-size: 50px;
+  text-align: center;
+  padding: 20px;
+  background: #f1f5f9;
+  border-radius: 12px;
+}
+
+.listing-card h3 {
+  margin-bottom: 8px;
+}
+
+.listing-card p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.listing-card strong {
+  display: block;
+  font-size: 20px;
+  margin-top: 15px;
+}
+
+.listing-card span {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
