@@ -165,7 +165,63 @@ input {
 
 .listing-card span {
   display: inline-block;
-  margin-top: 10px;
+  margin-top: 14px;
+  padding: 6px 12px;
+  border-radius: 20px;
   font-size: 12px;
   font-weight: bold;
+  background: #e0e7ee;
+  color: #243b53;
+}
+.categories {
+  text-align: center;
+  margin: 20px auto 50px;
+}
+
+.categories h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.category-list {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.category-list button {
+  margin: 0;
+  background: white;
+  color: #243b53;
+  border: 1px solid #bcccdc;
+  border-radius: 20px;
+  padding: 10px 20px;
+  transition: 0.2s;
+}
+
+.category-list button:hover {
+  background: #243b53;
+  color: white;
+}
+.listing-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+.details-button {
+  width: 100%;
+  margin: 16px 0 0;
+  padding: 10px;
+  border-radius: 10px;
+  background: #243b53;
+  color: white;
+  font-size: 14px;
+}
+
+.details-button:hover {
+  background: #334e68;
 }
