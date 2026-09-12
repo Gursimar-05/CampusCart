@@ -1,16 +1,60 @@
-# React + Vite
+# CampusCart 🛒
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CampusCart is a student-focused campus marketplace that makes it easier for students to buy, sell, rent, and discover useful items within their campus community.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 🔎 Search campus listings
+- 🏷️ Filter listings by type and category
+- 🛒 Buy or rent items
+- ❤️ Add listings to favourites
+- 📸 Upload an image when creating a listing
+- 📢 Show interest in a listing
+- 🔔 Receive interest notifications
+- 💬 Contact sellers through in-app messaging
+- 👤 Create a user account
+- 🔐 Secure login with password hashing
+- 🗄️ Store user accounts using MongoDB
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
+- React
+- Vite
+- JavaScript
+- CSS
 
-## Expanding the ESLint configuration
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- bcryptjs
+- CORS
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📁 Project Structure
+
+```text
+Campus_Cart/
+│
+├── backend/
+│   ├── models/
+│   │   └── User.cjs
+│   └── server.cjs
+│
+├── public/
+│
+├── src/
+│   ├── App.jsx
+│   ├── App.css
+│   ├── Navbar.jsx
+│   ├── Hero.jsx
+│   ├── SearchBar.jsx
+│   ├── ListingCard.jsx
+│   ├── ListingType.jsx
+│   ├── Categories.jsx
+│   └── listings.js
+│
+├── package.json
+├── package-lock.json
+└── README.md
