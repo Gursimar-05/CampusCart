@@ -1,5 +1,4 @@
-
-function Navbar({ onSell, onLogin,onFavourites }) {
+function Navbar({ onSell, onLogin, onFavourites }) {
 
   function handleBrowse() {
     document
@@ -23,9 +22,10 @@ function Navbar({ onSell, onLogin,onFavourites }) {
         <button onClick={onSell}>
           Sell
         </button>
+
         <button onClick={onFavourites}>
-  Favourites
-</button>
+          Favourites
+        </button>
 
         <button
           className="login-nav-button"
@@ -41,4 +41,3 @@ function Navbar({ onSell, onLogin,onFavourites }) {
 }
 
 export default Navbar
-

@@ -30,10 +30,10 @@ function App() {
 
   const [message, setMessage] = useState('')
   const [showLoginForm, setShowLoginForm] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-const [loginEmail, setLoginEmail] = useState('')
-const [loginPassword, setLoginPassword] = useState('')
-const [loginError, setLoginError] = useState('')
+  const [loginEmail, setLoginEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [loginError, setLoginError] = useState('')
+   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const [newListing, setNewListing] = useState({
     title: '',
@@ -45,16 +45,6 @@ const [loginError, setLoginError] = useState('')
     location: 'Your Block',
     image: ''
   })
-  function handleLogin() {
-  if (!loginEmail || !loginPassword) {
-    setLoginError('Please enter your email and password.')
-    return
-  }
-
-  setIsLoggedIn(true)
-  setShowLoginForm(false)
-  setLoginError('')
-}
 
   /* =========================
      SELL FORM
@@ -137,6 +127,53 @@ const [loginError, setLoginError] = useState('')
      INTERESTED
      ========================= */
 
+    async function handleLogin() {
+
+  if (!loginEmail.trim() || !loginPassword.trim()) {
+
+    setLoginError('Please enter your email and password.')
+
+    return
+  }
+
+  try {
+
+    const response = await fetch(
+      'http://localhost:5000/api/users/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: loginEmail,
+          password: loginPassword
+        })
+      }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+
+      setLoginError(data.message || 'Login failed.')
+
+      return
+    }
+
+    setLoginError('')
+
+    setIsLoggedIn(true)
+
+  } catch (error) {
+
+    console.error('Login error:', error)
+
+    setLoginError(
+      'Unable to connect to the server. Please try again.'
+    )
+  }
+}
   function handleInterested() {
     if (!selectedListing) {
       return
@@ -361,33 +398,36 @@ const [loginError, setLoginError] = useState('')
     FAVOURITES
     ========================= */}
 
-   <section id="favourites">
+<section id="favourites">
 
   <h2>Favourites</h2>
 
-  {listings
-    .filter((listing) => favourites.includes(listing.id))
-    .map((listing) => (
-      <ListingCard
-        key={listing.id}
-        title={listing.title}
-        description={listing.description}
-        price={listing.price}
-        type={listing.type}
-        category={listing.category}
-        image={listing.image}
-        seller={listing.seller}
-        location={listing.location}
-        onViewDetails={setSelectedListing}
-        isFavourite={true}
-        onToggleFavourite={() =>
-          handleToggleFavourite(listing.id)
-        }
-      />
-    ))}
+  <div className="listing-container">
+
+    {listings
+      .filter((listing) => favourites.includes(listing.id))
+      .map((listing) => (
+        <ListingCard
+          key={listing.id}
+          title={listing.title}
+          description={listing.description}
+          price={listing.price}
+          type={listing.type}
+          category={listing.category}
+          image={listing.image}
+          seller={listing.seller}
+          location={listing.location}
+          onViewDetails={setSelectedListing}
+          isFavourite={true}
+          onToggleFavourite={() =>
+            handleToggleFavourite(listing.id)
+          }
+        />
+      ))}
+
+  </div>
 
 </section>
-
         <div className="listings-heading">
 
           <div>
@@ -618,6 +658,105 @@ const [loginError, setLoginError] = useState('')
         </div>
 
       )}
+      {/* =========================
+    LOGIN MODAL
+    ========================= */}
+    {showLoginForm && (
+
+  <div className="modal-overlay">
+
+    <div className="modal login-modal">
+
+      <button
+        type="button"
+        className="modal-close"
+        onClick={() => {
+          setShowLoginForm(false)
+          setLoginError('')
+        }}
+      >
+        ×
+      </button>
+
+      {!isLoggedIn ? (
+
+        <>
+          <h2>Login</h2>
+
+          <p>
+            Login to your Campus Cart account.
+          </p>
+
+          <input
+            type="email"
+            placeholder="Email address"
+            value={loginEmail}
+            onChange={(event) =>
+              setLoginEmail(event.target.value)
+            }
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={loginPassword}
+            onChange={(event) =>
+              setLoginPassword(event.target.value)
+            }
+          />
+
+          {loginError && (
+            <p className="login-error">
+              {loginError}
+            </p>
+          )}
+
+          <button
+            type="button"
+            className="contact-button"
+            onClick={handleLogin}
+          >
+            Login
+          </button>
+
+        </>
+
+      ) : (
+
+        <div className="success-message">
+
+          <div className="success-icon">
+            ✓
+          </div>
+
+          <h2>
+            You're logged in!
+          </h2>
+
+          <p>
+            Welcome back to CampusCart.
+          </p>
+
+          <button
+            type="button"
+            className="contact-button"
+            onClick={() => {
+              setShowLoginForm(false)
+            }}
+          >
+            Continue
+          </button>
+
+        </div>
+
+      )}
+
+    </div>
+
+  </div>
+
+)}
+
 
       {/* =========================
           LISTING DETAILS
@@ -790,64 +929,7 @@ const [loginError, setLoginError] = useState('')
 
         </div>
 
-      )}
-            {/* =========================
-          LOGIN MODAL
-          ========================= */}
-
-      {showLoginForm && (
-
-        <div className="modal-overlay">
-
-          <div className="modal login-modal">
-
-           <h2>Login</h2>
-
-<p>
-  Login to your Campus Cart account.
-</p>
-
-<input
-  type="email"
-  placeholder="College email"
-  value={loginEmail}
-  onChange={(event) =>
-    setLoginEmail(event.target.value)
-  }
-/>
-
-<input
-  type="password"
-  placeholder="Password"
-  value={loginPassword}
-  onChange={(event) =>
-    setLoginPassword(event.target.value)
-  }
-/>
-
-{loginError && (
-  <p className="login-error">
-    {loginError}
-  </p>
-)}
-
-<button
-  className="contact-button"
-  onClick={handleLogin}
->
-  Login
-</button>
-
-            <small className="login-note">
-              Demo login — authentication will be added later.
-            </small>
-
-          </div>
-
-        </div>
-
-      )}
-      
+      )}     
     </div>
   )
 }
