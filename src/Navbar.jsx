@@ -1,4 +1,4 @@
-function Navbar({ onSell, onLogin, onFavourites }) {
+function Navbar({ onSell, onLogin, onSignUp, onFavourites }) {
 
   function handleBrowse() {
     document
@@ -25,6 +25,13 @@ function Navbar({ onSell, onLogin, onFavourites }) {
 
         <button onClick={onFavourites}>
           Favourites
+        </button>
+
+        <button
+          className="signup-nav-button"
+          onClick={onSignUp}
+        >
+          Create Account
         </button>
 
         <button

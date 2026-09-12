@@ -29,11 +29,21 @@ function App() {
   const [showNotifications, setShowNotifications] = useState(false)
 
   const [message, setMessage] = useState('')
+
+  // LOGIN
   const [showLoginForm, setShowLoginForm] = useState(false)
   const [loginEmail, setLoginEmail] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
   const [loginError, setLoginError] = useState('')
-   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  // SIGN UP
+  const [showSignupForm, setShowSignupForm] = useState(false)
+  const [signupName, setSignupName] = useState('')
+  const [signupEmail, setSignupEmail] = useState('')
+  const [signupPassword, setSignupPassword] = useState('')
+  const [signupError, setSignupError] = useState('')
+  const [signupSuccess, setSignupSuccess] = useState(false)
 
   const [newListing, setNewListing] = useState({
     title: '',
@@ -46,9 +56,9 @@ function App() {
     image: ''
   })
 
-  /* =========================
-     SELL FORM
-     ========================= */
+  // =========================
+  // SELL FORM
+  // =========================
 
   function handleInputChange(event) {
     const { name, value } = event.target
@@ -105,9 +115,9 @@ function App() {
     setShowSellForm(false)
   }
 
-  /* =========================
-     CONTACT SELLER
-     ========================= */
+  // =========================
+  // CONTACT SELLER
+  // =========================
 
   function handleContactSeller() {
     if (!message.trim()) {
@@ -123,57 +133,125 @@ function App() {
     setMessageSent(false)
   }
 
-  /* =========================
-     INTERESTED
-     ========================= */
+  // =========================
+  // SIGN UP
+  // =========================
 
-    async function handleLogin() {
-
-  if (!loginEmail.trim() || !loginPassword.trim()) {
-
-    setLoginError('Please enter your email and password.')
-
-    return
-  }
-
-  try {
-
-    const response = await fetch(
-      'http://localhost:5000/api/users/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: loginEmail,
-          password: loginPassword
-        })
-      }
-    )
-
-    const data = await response.json()
-
-    if (!response.ok) {
-
-      setLoginError(data.message || 'Login failed.')
-
+  async function handleSignup() {
+    if (
+      !signupName.trim() ||
+      !signupEmail.trim() ||
+      !signupPassword.trim()
+    ) {
+      setSignupError(
+        'Please enter your name, email and password.'
+      )
       return
     }
 
-    setLoginError('')
+    if (signupPassword.length < 6) {
+      setSignupError(
+        'Password must be at least 6 characters.'
+      )
+      return
+    }
 
-    setIsLoggedIn(true)
+    try {
+      const response = await fetch(
+        'http://localhost:5000/api/users/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: signupName,
+            email: signupEmail,
+            password: signupPassword
+          })
+        }
+      )
 
-  } catch (error) {
+      const data = await response.json()
 
-    console.error('Login error:', error)
+      if (!response.ok) {
+        setSignupError(
+          data.message || 'Unable to create account.'
+        )
+        return
+      }
 
-    setLoginError(
-      'Unable to connect to the server. Please try again.'
-    )
+      setSignupError('')
+      setSignupSuccess(true)
+
+      setSignupName('')
+      setSignupEmail('')
+      setSignupPassword('')
+
+    } catch (error) {
+      console.error('Signup error:', error)
+
+      setSignupError(
+        'Unable to connect to the server. Please try again.'
+      )
+    }
   }
-}
+
+  // =========================
+  // LOGIN
+  // =========================
+
+  async function handleLogin() {
+    if (
+      !loginEmail.trim() ||
+      !loginPassword.trim()
+    ) {
+      setLoginError(
+        'Please enter your email and password.'
+      )
+      return
+    }
+
+    try {
+      const response = await fetch(
+        'http://localhost:5000/api/users/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: loginEmail,
+            password: loginPassword
+          })
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setLoginError(
+          data.message || 'Login failed.'
+        )
+        return
+      }
+
+      setLoginError('')
+      setIsLoggedIn(true)
+
+    } catch (error) {
+      console.error('Login error:', error)
+
+      setLoginError(
+        'Unable to connect to the server. Please try again.'
+      )
+    }
+  }
+
+  // =========================
+  // INTERESTED
+  // =========================
+
   function handleInterested() {
     if (!selectedListing) {
       return
@@ -199,9 +277,9 @@ function App() {
     ])
   }
 
-  /* =========================
-     REMOVE NOTIFICATION
-     ========================= */
+  // =========================
+  // REMOVE NOTIFICATION
+  // =========================
 
   function removeNotification(notificationId) {
     setNotifications(
@@ -212,31 +290,36 @@ function App() {
     )
   }
 
-  /* =========================
-     CLOSE DETAILS
-     ========================= */
+  // =========================
+  // CLOSE DETAILS
+  // =========================
 
   function closeDetails() {
     setSelectedListing(null)
     setInterested(false)
   }
 
-  /* =========================
-     FILTER LISTINGS
-     ========================= */
+  // =========================
+  // FAVOURITES
+  // =========================
 
-    function handleToggleFavourite(listingId) {
-  if (favourites.includes(listingId)) {
-    setFavourites(
-      favourites.filter((id) => id !== listingId)
-    )
-  } else {
-    setFavourites([
-      ...favourites,
-      listingId
-    ])
+  function handleToggleFavourite(listingId) {
+    if (favourites.includes(listingId)) {
+      setFavourites(
+        favourites.filter((id) => id !== listingId)
+      )
+    } else {
+      setFavourites([
+        ...favourites,
+        listingId
+      ])
+    }
   }
-} 
+
+  // =========================
+  // FILTER LISTINGS
+  // =========================
+
   const filteredListings = listings.filter((listing) => {
     const matchesType =
       selectedType === 'ALL' ||
@@ -262,14 +345,29 @@ function App() {
     <div>
 
       <Navbar
-  onSell={() => setShowSellForm(true)}
-  onLogin={() => setShowLoginForm(true)}
-  onFavourites={() => {
-    document
-      .getElementById('favourites')
-      ?.scrollIntoView({ behavior: 'smooth' })
-  }}
-/>
+        onSell={() => setShowSellForm(true)}
+
+        onLogin={() => {
+          setShowSignupForm(false)
+          setShowLoginForm(true)
+          setLoginError('')
+        }}
+
+        onSignUp={() => {
+          setShowLoginForm(false)
+          setShowSignupForm(true)
+          setSignupError('')
+          setSignupSuccess(false)
+        }}
+
+        onFavourites={() => {
+          document
+            .getElementById('favourites')
+            ?.scrollIntoView({
+              behavior: 'smooth'
+            })
+        }}
+      />
 
       {/* =========================
           NOTIFICATIONS
@@ -280,7 +378,9 @@ function App() {
         <button
           className="notification-button"
           onClick={() =>
-            setShowNotifications(!showNotifications)
+            setShowNotifications(
+              !showNotifications
+            )
           }
         >
           🔔
@@ -332,8 +432,6 @@ function App() {
                     </small>
 
                   </div>
-
-                  {/* REMOVE NOTIFICATION */}
 
                   <button
                     className="remove-notification"
@@ -391,43 +489,51 @@ function App() {
           ========================= */}
 
       <section
-  id="marketplace"
-  className="listings-section"
->
-  {/* =========================
-    FAVOURITES
-    ========================= */}
+        id="marketplace"
+        className="listings-section"
+      >
 
-<section id="favourites">
+        {/* =========================
+            FAVOURITES
+            ========================= */}
 
-  <h2>Favourites</h2>
+        <section id="favourites">
 
-  <div className="listing-container">
+          <h2>Favourites</h2>
 
-    {listings
-      .filter((listing) => favourites.includes(listing.id))
-      .map((listing) => (
-        <ListingCard
-          key={listing.id}
-          title={listing.title}
-          description={listing.description}
-          price={listing.price}
-          type={listing.type}
-          category={listing.category}
-          image={listing.image}
-          seller={listing.seller}
-          location={listing.location}
-          onViewDetails={setSelectedListing}
-          isFavourite={true}
-          onToggleFavourite={() =>
-            handleToggleFavourite(listing.id)
-          }
-        />
-      ))}
+          <div className="listing-container">
 
-  </div>
+            {listings
+              .filter((listing) =>
+                favourites.includes(listing.id)
+              )
+              .map((listing) => (
 
-</section>
+                <ListingCard
+                  key={listing.id}
+                  title={listing.title}
+                  description={listing.description}
+                  price={listing.price}
+                  type={listing.type}
+                  category={listing.category}
+                  image={listing.image}
+                  seller={listing.seller}
+                  location={listing.location}
+                  onViewDetails={setSelectedListing}
+                  isFavourite={true}
+                  onToggleFavourite={() =>
+                    handleToggleFavourite(
+                      listing.id
+                    )
+                  }
+                />
+
+              ))}
+
+          </div>
+
+        </section>
+
         <div className="listings-heading">
 
           <div>
@@ -448,7 +554,9 @@ function App() {
 
           <button
             className="sell-button"
-            onClick={() => setShowSellForm(true)}
+            onClick={() =>
+              setShowSellForm(true)
+            }
           >
             + Sell an Item
           </button>
@@ -471,13 +579,20 @@ function App() {
                 image={listing.image}
                 seller={listing.seller}
                 location={listing.location}
-                onViewDetails={setSelectedListing}
-                 isFavourite={favourites.includes(listing.id)}
-  onToggleFavourite={() =>
-    handleToggleFavourite(listing.id)
-  }
+                onViewDetails={
+                  setSelectedListing
+                }
+                isFavourite={
+                  favourites.includes(
+                    listing.id
+                  )
+                }
+                onToggleFavourite={() =>
+                  handleToggleFavourite(
+                    listing.id
+                  )
+                }
               />
-               
 
             ))
 
@@ -529,7 +644,9 @@ function App() {
               on campus.
             </p>
 
-            <form onSubmit={handleAddListing}>
+            <form
+              onSubmit={handleAddListing}
+            >
 
               <input
                 type="text"
@@ -577,31 +694,33 @@ function App() {
 
               </select>
 
-           <select
-  name="category"
-  value={newListing.category}
-  onChange={handleInputChange}
->
-  <option value="Books">
-    Books
-  </option>
+              <select
+                name="category"
+                value={newListing.category}
+                onChange={handleInputChange}
+              >
 
-  <option value="Electronics">
-    Electronics
-  </option>
+                <option value="Books">
+                  Books
+                </option>
 
-  <option value="Furniture">
-    Furniture
-  </option>
+                <option value="Electronics">
+                  Electronics
+                </option>
 
-  <option value="Stationery">
-    Stationery
-  </option>
+                <option value="Furniture">
+                  Furniture
+                </option>
 
-  <option value="Clothing">
-    Clothing
-  </option>
-</select>
+                <option value="Stationery">
+                  Stationery
+                </option>
+
+                <option value="Clothing">
+                  Clothing
+                </option>
+
+              </select>
 
               <input
                 type="text"
@@ -611,8 +730,6 @@ function App() {
                 onChange={handleInputChange}
                 required
               />
-
-              {/* IMAGE UPLOAD */}
 
               <div className="image-upload">
 
@@ -658,105 +775,275 @@ function App() {
         </div>
 
       )}
+
       {/* =========================
-    LOGIN MODAL
-    ========================= */}
-    {showLoginForm && (
+          SIGN UP MODAL
+          ========================= */}
 
-  <div className="modal-overlay">
+      {showSignupForm && (
 
-    <div className="modal login-modal">
+        <div className="modal-overlay">
 
-      <button
-        type="button"
-        className="modal-close"
-        onClick={() => {
-          setShowLoginForm(false)
-          setLoginError('')
-        }}
-      >
-        ×
-      </button>
+          <div className="modal login-modal">
 
-      {!isLoggedIn ? (
+            <button
+              type="button"
+              className="modal-close"
+              onClick={() => {
+                setShowSignupForm(false)
+                setSignupError('')
+                setSignupSuccess(false)
+              }}
+            >
+              ×
+            </button>
 
-        <>
-          <h2>Login</h2>
+            {!signupSuccess ? (
 
-          <p>
-            Login to your Campus Cart account.
-          </p>
+              <>
 
-          <input
-            type="email"
-            placeholder="Email address"
-            value={loginEmail}
-            onChange={(event) =>
-              setLoginEmail(event.target.value)
-            }
-          />
+                <h2>
+                  Create Account
+                </h2>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={loginPassword}
-            onChange={(event) =>
-              setLoginPassword(event.target.value)
-            }
-          />
+                <p>
+                  Create your Campus Cart account.
+                </p>
 
-          {loginError && (
-            <p className="login-error">
-              {loginError}
-            </p>
-          )}
+                <input
+                  type="text"
+                  placeholder="Full name"
+                  value={signupName}
+                  onChange={(event) =>
+                    setSignupName(
+                      event.target.value
+                    )
+                  }
+                />
 
-          <button
-            type="button"
-            className="contact-button"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  value={signupEmail}
+                  onChange={(event) =>
+                    setSignupEmail(
+                      event.target.value
+                    )
+                  }
+                />
 
-        </>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={signupPassword}
+                  onChange={(event) =>
+                    setSignupPassword(
+                      event.target.value
+                    )
+                  }
+                />
 
-      ) : (
+                {signupError && (
 
-        <div className="success-message">
+                  <p className="login-error">
+                    {signupError}
+                  </p>
 
-          <div className="success-icon">
-            ✓
+                )}
+
+                <button
+                  type="button"
+                  className="contact-button"
+                  onClick={handleSignup}
+                >
+                  Create Account
+                </button>
+
+                <p>
+                  Already have an account?{' '}
+
+                  <button
+                    type="button"
+                    className="modal-switch-button"
+                    onClick={() => {
+                      setShowSignupForm(false)
+                      setSignupError('')
+                      setShowLoginForm(true)
+                    }}
+                  >
+                    Login
+                  </button>
+
+                </p>
+
+              </>
+
+            ) : (
+
+              <div className="success-message">
+
+                <div className="success-icon">
+                  ✓
+                </div>
+
+                <h2>
+                  Account Created!
+                </h2>
+
+                <p>
+                  Your Campus Cart account has been
+                  created successfully.
+                </p>
+
+                <button
+                  type="button"
+                  className="contact-button"
+                  onClick={() => {
+                    setShowSignupForm(false)
+                    setSignupSuccess(false)
+                    setShowLoginForm(true)
+                  }}
+                >
+                  Go to Login
+                </button>
+
+              </div>
+
+            )}
+
           </div>
-
-          <h2>
-            You're logged in!
-          </h2>
-
-          <p>
-            Welcome back to CampusCart.
-          </p>
-
-          <button
-            type="button"
-            className="contact-button"
-            onClick={() => {
-              setShowLoginForm(false)
-            }}
-          >
-            Continue
-          </button>
 
         </div>
 
       )}
 
-    </div>
+      {/* =========================
+          LOGIN MODAL
+          ========================= */}
 
-  </div>
+      {showLoginForm && (
 
-)}
+        <div className="modal-overlay">
 
+          <div className="modal login-modal">
+
+            <button
+              type="button"
+              className="modal-close"
+              onClick={() => {
+                setShowLoginForm(false)
+                setLoginError('')
+              }}
+            >
+              ×
+            </button>
+
+            {!isLoggedIn ? (
+
+              <>
+
+                <h2>
+                  Login
+                </h2>
+
+                <p>
+                  Login to your Campus Cart account.
+                </p>
+
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  value={loginEmail}
+                  onChange={(event) =>
+                    setLoginEmail(
+                      event.target.value
+                    )
+                  }
+                />
+
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={loginPassword}
+                  onChange={(event) =>
+                    setLoginPassword(
+                      event.target.value
+                    )
+                  }
+                />
+
+                {loginError && (
+
+                  <p className="login-error">
+                    {loginError}
+                  </p>
+
+                )}
+
+                <button
+                  type="button"
+                  className="contact-button"
+                  onClick={handleLogin}
+                >
+                  Login
+                </button>
+
+                <p>
+                  Don't have an account?{' '}
+
+                  <button
+                    type="button"
+                    className="modal-switch-button"
+                    onClick={() => {
+                      setShowLoginForm(false)
+                      setLoginError('')
+                      setShowSignupForm(true)
+                      setSignupError('')
+                      setSignupSuccess(false)
+                    }}
+                  >
+                    Create Account
+                  </button>
+
+                </p>
+
+              </>
+
+            ) : (
+
+              <div className="success-message">
+
+                <div className="success-icon">
+                  ✓
+                </div>
+
+                <h2>
+                  You're logged in!
+                </h2>
+
+                <p>
+                  Welcome back to CampusCart.
+                </p>
+
+                <button
+                  type="button"
+                  className="contact-button"
+                  onClick={() => {
+                    setShowLoginForm(false)
+                  }}
+                >
+                  Continue
+                </button>
+
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
+
+      )}
 
       {/* =========================
           LISTING DETAILS
@@ -813,8 +1100,6 @@ function App() {
 
             </div>
 
-            {/* FIXED INTERESTED BUTTON */}
-
             <button
               className={
                 interested
@@ -847,92 +1132,96 @@ function App() {
           CONTACT SELLER
           ========================= */}
 
-      {showContactForm && selectedListing && (
+      {showContactForm &&
+        selectedListing && (
 
-        <div className="modal-overlay">
+          <div className="modal-overlay">
 
-          <div className="modal contact-modal">
+            <div className="modal contact-modal">
 
-            <button
-              className="modal-close"
-              onClick={closeContactForm}
-            >
-              ×
-            </button>
+              <button
+                className="modal-close"
+                onClick={closeContactForm}
+              >
+                ×
+              </button>
 
-            {!messageSent ? (
+              {!messageSent ? (
 
-              <>
+                <>
 
-                <div className="contact-icon">
-                  💬
+                  <div className="contact-icon">
+                    💬
+                  </div>
+
+                  <h2>
+                    Contact {selectedListing.seller}
+                  </h2>
+
+                  <p>
+                    Send a message about{' '}
+
+                    <strong>
+                      {selectedListing.title}
+                    </strong>
+                  </p>
+
+                  <textarea
+                    className="message-input"
+                    placeholder="Hi! Is this item still available?"
+                    value={message}
+                    onChange={(event) =>
+                      setMessage(
+                        event.target.value
+                      )
+                    }
+                  />
+
+                  <button
+                    className="contact-button"
+                    onClick={handleContactSeller}
+                  >
+                    Send Message
+                  </button>
+
+                </>
+
+              ) : (
+
+                <div className="success-message">
+
+                  <div className="success-icon">
+                    ✓
+                  </div>
+
+                  <h2>
+                    Message Sent!
+                  </h2>
+
+                  <p>
+                    Your message has been sent to{' '}
+                    {selectedListing.seller}.
+                  </p>
+
+                  <button
+                    className="contact-button"
+                    onClick={closeContactForm}
+                  >
+                    Done
+                  </button>
+
                 </div>
 
-                <h2>
-                  Contact {selectedListing.seller}
-                </h2>
+              )}
 
-                <p>
-                  Send a message about{' '}
-                  <strong>
-                    {selectedListing.title}
-                  </strong>
-                </p>
-
-                <textarea
-                  className="message-input"
-                  placeholder="Hi! Is this item still available?"
-                  value={message}
-                  onChange={(event) =>
-                    setMessage(event.target.value)
-                  }
-                />
-
-                <button
-                  className="contact-button"
-                  onClick={handleContactSeller}
-                >
-                  Send Message
-                </button>
-
-              </>
-
-            ) : (
-
-              <div className="success-message">
-
-                <div className="success-icon">
-                  ✓
-                </div>
-
-                <h2>
-                  Message Sent!
-                </h2>
-
-                <p>
-                  Your message has been sent to{' '}
-                  {selectedListing.seller}.
-                </p>
-
-                <button
-                  className="contact-button"
-                  onClick={closeContactForm}
-                >
-                  Done
-                </button>
-
-              </div>
-
-            )}
+            </div>
 
           </div>
 
-        </div>
+        )}
 
-      )}     
     </div>
   )
 }
 
 export default App
-
